@@ -1,0 +1,14 @@
+# GET
+GET https://localhost:44301/api/Planets
+
+# GET
+GET https://localhost:44301/api/Planets/1
+
+# POST 
+POST https://localhost:44301/api/Planets
+content-type: application/json
+{
+    "Id": 1,
+    "Name": "Tatooine",
+    "Population": 5000000
+}
