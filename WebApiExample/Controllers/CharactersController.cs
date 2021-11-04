@@ -11,55 +11,52 @@ namespace WebApiExample.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MoviesController : ControllerBase
+    public class CharactersController : ControllerBase
     {
         private readonly StarWarsContext _context;
 
-        public MoviesController(StarWarsContext context)
+        public CharactersController(StarWarsContext context)
         {
             _context = context;
         }
 
-        // GET: api/Movies
+        // GET: api/Characters
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
+        public async Task<ActionResult<IEnumerable<Character>>> GetCharacters()
         {
-            return await _context.Movies
-                .Include( i => i.Planets )
-                .Include( i => i.Characters )
+            return await _context.Characters
+                .Include( i => i.FirstAppearence )
                 .ToListAsync();
         }
 
-        // GET: api/Movies/5
+        // GET: api/Characters/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(long id)
+        public async Task<ActionResult<Character>> GetCharacter(long id)
         {
-            var movie = await _context.Movies
-                .Include(i => i.Planets)
+            var character = await _context.Characters
+                .Include( i => i.FirstAppearence )
                 .FirstOrDefaultAsync(i => i.Id == id);
 
-            //FindAsync(id);
-
-            if (movie == null)
+            if (character == null)
             {
                 return NotFound();
             }
 
-            return movie;
+            return character;
         }
 
-        // PUT: api/Movies/5
+        // PUT: api/Characters/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<ActionResult<Movie>> PutMovie(long id, Movie movie)
+        public async Task<IActionResult> PutCharacter(long id, Character character)
         {
-            if (id != movie.Id)
+            if (id != character.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(movie).State = EntityState.Modified;
+            _context.Entry(character).State = EntityState.Modified;
 
             try
             {
@@ -67,7 +64,7 @@ namespace WebApiExample.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MovieExists(id))
+                if (!CharacterExists(id))
                 {
                     return NotFound();
                 }
@@ -77,42 +74,40 @@ namespace WebApiExample.Controllers
                 }
             }
 
-            //return NoContent();
-            return movie;
+            return NoContent();
         }
 
-        // POST: api/Movies
+        // POST: api/Characters
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
+        public async Task<ActionResult<Character>> PostCharacter(Character character)
         {
-            _context.Movies.Add(movie);
+            _context.Characters.Add(character);
             await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
-            return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, movie);
+            return CreatedAtAction(nameof(GetCharacter), new { id = character.Id }, character);
         }
 
-        // DELETE: api/Movies/5
+        // DELETE: api/Characters/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Movie>> DeleteMovie(long id)
+        public async Task<ActionResult<Character>> DeleteCharacter(long id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
+            var character = await _context.Characters.FindAsync(id);
+            if (character == null)
             {
                 return NotFound();
             }
 
-            _context.Movies.Remove(movie);
+            _context.Characters.Remove(character);
             await _context.SaveChangesAsync();
 
-            return movie;
+            return character;
         }
 
-        private bool MovieExists(long id)
+        private bool CharacterExists(long id)
         {
-            return _context.Movies.Any(e => e.Id == id);
+            return _context.Characters.Any(e => e.Id == id);
         }
     }
 }

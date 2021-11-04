@@ -8,9 +8,11 @@ namespace WebApiExample.Models
     public class Character
     {
         public long Id { get; set; }
-        private string Name { get; set; }
-        private int Age { get; set; }
-        private Planet Planet { get; set; }
-        private Movie FirstAppearence { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
+        //public long PlanetId { get; set; }
+        public long MovieId { get; set; }
+        //public Planet Planet { get; set; }
+        public Movie FirstAppearence { get; set; }
     }
 }

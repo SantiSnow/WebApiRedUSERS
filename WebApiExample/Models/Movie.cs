@@ -10,7 +10,8 @@ namespace WebApiExample.Models
         public long Id { get; set; }
         public string Name { get; set; }
         public int Year { get; set; }
-        private List<Character> Characters { get; set; }
-        private List<Planet> Planets { get; set; }
+        //private List<Character> Characters { get; set; }
+        public ICollection<Planet> Planets { get; set; }
+        public ICollection<Character> Characters { get; set; }
     }
 }

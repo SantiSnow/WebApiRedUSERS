@@ -24,7 +24,9 @@ namespace WebApiExample.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Planet>>> GetPlanets()
         {
-            return await _context.Planets.ToListAsync();
+            return await _context.Planets
+                .Include( i => i.FirstAppearence )
+                .ToListAsync();
         }
 
         // GET: api/Planets/5
@@ -45,7 +47,7 @@ namespace WebApiExample.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlanet(long id, Planet planet)
+        public async Task<ActionResult<Planet>> PutPlanet(long id, Planet planet)
         {
             if (id != planet.Id)
             {
@@ -70,7 +72,8 @@ namespace WebApiExample.Controllers
                 }
             }
 
-            return NoContent();
+            //return NoContent();
+            return planet;
         }
 
         // POST: api/Planets
@@ -82,7 +85,11 @@ namespace WebApiExample.Controllers
             _context.Planets.Add(planet);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPlanet), new { id = planet.Id }, planet);
+            return await _context.Planets
+                .Include( i => i.FirstAppearence )
+                .FirstOrDefaultAsync(i => i.Id == planet.Id);
+
+            //return CreatedAtAction(nameof(GetPlanet), new { id = planet.Id }, planet);
         }
 
         // DELETE: api/Planets/5
