@@ -45,7 +45,41 @@ namespace WebApiExample.Controllers
             return character;
         }
 
+        // GET: api/SearchCharacters/
 
+        [HttpGet("getCharacter/{name}")] // GET /api/Characters/getCharacter/name
+        public string GetCharactersName() //async Task<ActionResult<Character>> GetCharacterByName(string name)
+        {
+            /*
+            var character = await _context.Characters
+                .Include(i => i.FirstAppearence)
+                .FirstOrDefaultAsync(i => i.Name == name);
+
+            if (character == null)
+            {
+                return NotFound();
+            }*/
+
+            return "character";
+        }
+
+        
+        [HttpPost] // /api/Characters/getCharacter
+        [Route("~/api/getCharacterByName")]
+        public async Task<ActionResult<Character>> GetCharacterByName(CharacterName searched)
+        {
+            
+            var character = await _context.Characters
+                .Include(i => i.FirstAppearence)
+                .FirstOrDefaultAsync(i => i.Name == searched.Name);
+
+            if (character == null)
+            {
+                return NotFound();
+            }
+
+            return character;
+        }
 
         // PUT: api/Characters/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

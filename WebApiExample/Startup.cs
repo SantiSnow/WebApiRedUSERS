@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApiExample.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApiExample
 {
@@ -55,6 +56,10 @@ namespace WebApiExample
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("API Funcionando");
+                });
                 endpoints.MapControllers();
             });
         }
