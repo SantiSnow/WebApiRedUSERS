@@ -68,10 +68,11 @@ namespace WebApiExample.Controllers
         [Route("~/api/getCharacterByName")]
         public async Task<ActionResult<Character>> GetCharacterByName(CharacterName searched)
         {
-            
+
             var character = await _context.Characters
                 .Include(i => i.FirstAppearence)
-                .FirstOrDefaultAsync(i => i.Name == searched.Name);
+                //.FirstOrDefaultAsync(i => i.Name.Contains(searched.Name));
+                .FirstOrDefaultAsync(i => EF.Functions.Like(i.Name, "%a%"));
 
             if (character == null)
             {
